@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مكتبة صحيح // الموسوعة الإسلامية للحديث النبوي والأدعية والأذكار</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="<!-- خطوط عربية إسلامية أصيلة من Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;700;800;900&family=Scheherazade+New:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Cairo', sans-serif; }
+    .font-hadith { font-family: 'Amiri', serif; }
+    .font-quran { font-family: 'Scheherazade New', serif; }
+    /* شريط التمرير */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track {}81; border-radius: 4px; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-600 selection:text-white antialiased">
+
+  <!-- ==================== رأس الموقع (Header) ==================== -->
+  <header class="bg-emerald-950 border-b border-emerald-800/80 sticky top-0 z-40 shadow-xl">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 bg-emerald-800/60 border border-emerald-500/50 rounded-2xl flex items-center justify-center text-emerald-300 font-black text-2xl shadow-inner">
+          📖
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl sm:text-2xl font-black text-emerald-300 tracking-wide font-hadith">مكتبة صحيح</h1>
+            <span class="text-[10px] bg-emerald-900 text-emerald-300 border border-emerald-600/40 px-2 py-0.5 rounded-full font-bold">الموسوعة المعتمدة</span>
+          </div>
+          <p class="text-xs text-slate-400">الحديث النبوي الشريف • الأدعية القرآنية والنبوية • حصن المسلم والسبحة</p>
+        </div>
+      </div>
+
+      <!-- محرك البحث السريع وأدوات القراءة -->
+      <div class="flex items-center gap-3 flex-1 sm:flex-initial justify-end">
+        <div class="relative w-full sm:w-64">
+          <input
+            type="text"
+            id="search-input"
+            oninput="handleSearch(this.value)"
+            placeholder="ابحث في الأحاديث، الأدعية، أو الرواة..."
+            class="w-full bg-slate-950/80 border border-emerald-700/60 focus:border-emerald-400 rounded-xl px-3 py-1.5 text-xs text-slate-200 focus:outline-none placeholder:text-slate-500"
+          />
+          <span class="absolute left-2.5 top-2 text-slate-400 text-xs">🔍</span>
+        </div>
+
+        <button onclick="toggleTasbeehModal()" class="flex items-center gap-1.5 bg-emerald-800 hover:bg-emerald-700 text-emerald-200 border border-emerald-600/50 px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-md">
+          <span>📿</span>
+          <span class="hidden sm:inline">السبحة</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== شريط الأقسام والكتب ==================== -->
+  <nav class="bg-slate-950 border-b border-slate-800 sticky top-16 z-30 shadow-md">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center gap-2 overflow-x-auto py-2.5 text-xs font-bold scrollbar-none">
+      <button onclick="filterCategory('all')" id="cat-all" class="cat-btn px-4 py-1.5 rounded-xl bg-emerald-600 text-white whitespace-nowrap transition">
+        📚 جميع المحتويات
+      </button>
+      <button onclick="filterCategory('bukhari')" id="cat-bukhari" class="cat-btn px-4 py-1.5 rounded-xl bg-slate-900 text-slate-400 hover:text-white whitespace-nowrap transition">
+        📗 صحيح البخاري
+      </button>
+      <button onclick="filterCategory('muslim')" id="cat-muslim" class="cat-btn px-4 py-1.5 rounded-xl bg-slate-900 text-slate-400 hover:text-white whitespace-nowrap transition">
+        📘 صحيح مسلم
+      </button>
+      <button onclick="filterCategory('nawawi')" id="cat-nawawi" class="cat-btn px-4 py-1.5 rounded-xl bg-slate-900 text-slate-400 hover:text-white whitespace-nowrap transition">
+        📜 الأربعون النووية
+      </button>
+      <button onclick="filterCategory('riyad')" id="cat-riyad" class="cat-btn px-4 py-1.5 rounded-xl bg-slate-900 text-slate-400 hover:text-white whitespace-nowrap transition">
+        🌿 رياض الصالحين
+      </button>
+      <button onclick="filterCategory('duas')" id="cat-duas" class="cat-btn px-4 py-1.5 rounded-xl bg-slate-900 text-slate-400 hover:text-white whitespace-nowrap transition">
+        🤲 أدعية نبوية وقرآنية
+      </button>
+      <button onclick="filterCategory('adhkar')" id="cat-adhkar" class="cat-btn px-4 py-1.5 rounded-xl bg-slate-900 text-slate-400 hover:text-white whitespace-nowrap transition">
+        ☀️ أذكار الصباح والمساء
+      </button>
+      <button onclick="filterCategory('favorites')" id="cat-favorites" class="cat-btn px-4 py-1.5 rounded-xl bg-slate-900 text-amber-400 hover:bg-slate-800 whitespace-nowrap transition flex items-center gap-1">
+        <span>⭐ المفضلة</span>
+        <span id="fav-count" class="bg-amber-950 px-1.5 py-0.2 rounded-full text-[10px] font-bold border border-amber-600/50">0</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================== المحتوى وقائمة البطاقات ==================== -->
+  <main class="max-w-6xl mx-auto w-full px-4 sm:px-6 py-6 flex-1 flex flex-col gap-6">
+
+    <!-- شريط معلومات القسم الحالي -->
+    <div class="flex items-center justify-between text-xs text-slate-400 border-b border-slate-800 pb-2">
+      <div class="flex items-center gap-2">
+        <span id="section-title" class="font-bold text-emerald-400 text-sm">جميع الأحاديث والأدعية الصحيحة</span>
+        <span class="text-slate-600">•</span>
+        <span id="items-count" class="font-mono text-slate-400">14 نصاً معتمداً</span>
+      </div>
+      <div class="text-[11px] text-slate-500">محققة ومخرجة من أمهات كتب السنة</div>
+    </div>
+
+    <!-- شبكة عرض البطاقات -->
+    <div id="cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- البطاقات تُحقن بالجافاسكريبت -->
+    </div>
+
+    <div id="no-results" class="hidden text-center py-16 flex flex-col items-center gap-3">
+      <div class="text-4xl text-slate-600">🔍</div>
+      <p class="text-sm text-slate-400 font-bold">لم يتم العثور على نتائج تطابق بحثك</p>
+      <button onclick="resetSearch()" class="px-4 py-1.5 bg-emerald-700 text-white text-xs rounded-xl font-bold">إعادة تعيين البحث</button>
+    </div>
+  </main>
+
+  <!-- ==================== نافذة السبحة الإلكترونية التفاعلية (Modal) ==================== -->
+  <div id="tasbeeh-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-slate-950 border-2 border-emerald-500/50 rounded-3xl max-w-sm w-full p-6 text-center flex flex-col items-center gap-4 shadow-2xl relative">
+      <button onclick="toggleTasbeehModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-base">✕</button>
+
+      <div class="w-12 h-12 rounded-2xl bg-emerald-950 border border-emerald-600/50 flex items-center justify-center text-2xl text-emerald-400">
+        📿
+      </div>
+      <div>
+        <h3 class="text-lg font-black text-emerald-300">السبحة الإلكترونية</h3>
+        <p id="dhikr-label" class="text-xs text-slate-400 mt-0.5">سبحان الله وبحمده، سبحان الله العظيم</p>
+      </div>
+
+      <!-- دائرة العداد -->
+      <button onclick="incrementTasbeeh()" class="w-40 h-40 rounded-full border-4 border-emerald-500/50 bg-emerald-950/40 hover:bg-emerald-900/60 active:scale-95 transition-all flex flex-col items-center justify-center shadow-inner cursor-pointer my-2 group">
+        <span id="tasbeeh-count" class="text-5xl font-black text-emerald-300 font-mono tracking-tight group-hover:scale-110 transition">0</span>
+        <span class="text-[10px] text-emerald-500 font-bold mt-1">اضغط للتسبيح</span>
+      </button>
+
+      <!-- أزرار الأذكار وإعادة الضبط -->
+      <div class="flex items-center gap-2 flex-wrap justify-center text-xs">
+        <button onclick="setDhikrText('سبحان الله وبحمده، سبحان الله العظيم')" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:text-emerald-400">سبحان الله</button>
+        <button onclick="setDhikrText('الحمد لله رب العالمين')" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:text-emerald-400">الحمد لله</button>
+        <button onclick="setDhikrText('لا إله إلا الله وحده لا شريك له')" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:text-emerald-400">لا إله إلا الله</button>
+        <button onclick="setDhikrText('الله أكبر كبيراً')" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:text-emerald-400">الله أكبر</button>
+        <button onclick="setDhikrText('أستغفر الله العظيم وأتوب إليه')" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:text-emerald-400">أستغفر الله</button>
+      </div>
+
+      <div class="pt-3 border-t border-slate-800 w-full flex justify-between items-center text-xs text-slate-500">
+        <span>الهدف الموصى به: 33 / 100</span>
+        <button onclick="resetTasbeeh()" class="text-rose-400 hover:text-rose-300 font-bold">تصفير العداد ↺</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- تذييل الصفحة -->
+  <footer class="bg-emerald-950 border-t border-emerald-900 py-4 px-6 text-center text-xs text-slate-400">
+    <div class="max-w-6xl mx-auto flex flex-colitems-center justify-between gap-3"> text-emerald-300">مكتبة صحيح // Sahih Islamic Library</div>
+      <div class="text-[11px] text-slate-400">جميع الأحاديث والأدعية مأخوذة من المصادر الصحيحة المعتمدة</div>
+      <div class="text-[11px] text-slate-500">تطبيق ويب إسلامي مفتوح وخالٍ تماماً من الإعلانات</div>
+    </div>
+  </footer>
+
+  <!-- ==================== بيانات الأحاديث والأدعية ومحرك الجافاسكريبت ==================== -->
+  <script>
+    // قاعدة بيانات النصوص الموثقة
+    const database = [
+      {
+        id: "b-1",
+        category: "bukhari",
+        bookName: "صحيح البخاري",
+        chapter: "كتاب بدء الوحي • الحديث رقم 1",
+        title: "حديث إنما الأعمال بالنيات",
+        narrator: "عمر بن الخطاب رضي الله عنه",
+        رسولَ اللهِ ﷺ يقولُ: «إنَّما الأعمالُ بالنِّيَّاتِ، وإنَّما لِكُلِّ امرِئٍ ما نَوَى، فمَن كانت هِجْرَتُهُ إلى اللهِ ورسولِهِ فهِجْرَتُهُ إلى اللهِ ورسولِهِ، ومَن كانت هِجْرَتُهُ لدُنيا يُصِيبُها أوِ امرَأةٍ يَتَزَوَّجُها فهِجْرَتُهُ إلى ما هاجَرَ إليهِ».",
+        grade: "صحيح متفق عليه (أعلى درجات الصحة)",
+        virtعظيم من أصول الإسلام ومدار الأعمال والعبادات كلها.": "b-2",
+        category: "bukhari",
+        bookName: "صحيح البخاري",
+        chapter: "كتاب الإيمان • باب حب الرسول",
+        title: "حديث حلاوة الإيمان ومحبة المؤمنين",
+        narrator: "أنس بن مالك رضي الله عنه",
+        text: "عن النبيِّ ﷺ قالَ: «لا يُؤْمِنُ أحَدُكُمْ حتَّى يُحِبَّ لأخِيهِ ما يُحِبُّ لِنَفْسِهِ».",
+        grade: "صحيح متفق عليه",
+        virtue: "بيان كمال الإيمان وأهمية سلامة الصدر ومحبة الخير للناس."
+      },
+      {
+        id: "m-1",
+        category: "muslim",
+        bookName: "صحيح مسلم",
+        chapter: "كتاب الذكر والدعاء والتوبة",
+        title: "حديث فضل مجالس الذكر ونزول السكينة",
+        narrهريرة وأبو سعيد الخدري رضي الله عنهما", ﷺ: «لا يقعد قوم يذكرون الله عز وجل إلا حفتهم الملائكة، وغشيتهم الرحمة، ونزلت عليهم السكينة، وذكرهم الله فيمن عنده».",
+        grade: "صحيح مسلم",
+        virtue: "فضل الاجتماع على ذكر الله وقراءة القرآن والحديث الشريف."
+      },
+      {
+        id: "m-2",
+        category: "muslim",
+        bookName: "صحيح مسلم",
+        chapter: "كتاب البر والصلة والآداب",
+        التراحم وتماسك الأمة",ما",
+        text: "قال رسول الله ﷺ: «مَثَلُ المُؤْمِنِينَ في تَوادِّهِمْ، وتَراحُمِهِمْ، وتَعاطُفِهِمْ مَثَلُ الجَسَدِ إذا اشْتَكَى منه عُضْوٌ تَداعَى له سائِرُ الجَسَدِ بالسَّهَرِ والحُمَّى».",
+        grade: "صحيح مسلم",
+        virtue: "الدعوة إلى التعاطف ونصرة المكروب والمحتاج والتكافل الاجتماعي."
+      },
+      {
+        id: "n-1",
+        category: "nawawi",
+        bookName: "الأربعون النووية",
+        chapter: "الحديث الثاني • حديث جبريل المشهور",
+        title: "مراتب الدين الثلاث: الإسلام والإيمان والإحسان",
+        narrator: "عمر بن الخطاب رضي الله عنه",
+        text: "«قال: فأخبرني عن الإسلام؟ قال: الإسلام أن تشهد أن لا إله إلا الله وأن محمداً رسول الله، وتقيم الصلاة، وتؤتي الزكاة، وتصوم رمضان، وتحج البيت إن استطعت إليه سبيلاً... قال: فأخبرني عن الإحسان؟ قال: أن تعبد الله كأنك تراه، فإن لم تكن تراه فإنه يراك...».",
+        grade: "صحيح مسلم",
+        virtue: "جامع لأركان الدين الظاهرة والباطنة وحقيقة مراقبة الله."
+      },
+      {
+        id: "n-2",
+        category: "nawawi",
+        bookالنووية", "حديث احفظ الله يحفظك",
+        narrator: "عبد الله بن عباس رضي الله عنهما",
+        خلف النبي ﷺ يوماً فقال: «يا غلامُ، إني أُعلِّمُك كلماتٍ: احفظِ اللهَ يحفظْك، احفظِ اللهَ تجدْه تُجاهَك، إذا سألتَ فاسألِ اللهَ، وإذا استعنتَ فاستعنْ باللهِ، واعلمْ أنَّ الأمَّةَ لو اجتمعتْ على أن ينفعوك بشيءٍ لم ينفعوك إلا بشيءٍ قد كتبه اللهُ لك...».",
+        grade: "صحيح رواه الترمذي وأحمد",
+        virtue: "من أعظم وصايا التوكل واليقين وتفويض الأمور لله وحده."
+      },
+      {
+        id: "r-1",
+        category: "riyad",
+        bookName: "رياض الصالحين",
+        chapter: "باب الصبر • الحديث رقم 25",
+        title: "عجباً لأمر المؤمن إن أمره كله له خير",
+        narrator: "صهيب الرومي رضي الله عنه",
+        text: "قال رسول الله ﷺ: «عَجَبًا لأَمْرِ المُؤْمِنِ، إنَّ أمْرَهُ كُلَّهُ خَيْرٌ، وليسَ ذاكَ لأَحَدٍ إلَّا لِلْمُؤْمِنِ، إنْ أصابَتْهُ سَرَّاءُ شَكَرَ، فَكانَ خَيْرًا له، وإنْ أصابَتْهُ ضَرَّاءُ، صَبَرَ فَكانَ خَيْرًا له».",
+        grade: "صحيح مسلم",
+        virtue: "بث الطمأنينة في قلب المسلم عند البلاء والرخاء."
+      },
+      {
+        id: "r-2",
+        category: "riyad",
+        bookName: "رياض الصالحين",
+        chapter: "باب فضل الرجاء وحسن الظن بالله",
+        title: "الحديث القدسي: أنا عند ظن عبدي بي",
+        narrator: "أبو هريرة رضي الله عنه",
+        text: "يقولُ اللَّهُ تَعالَى: «أنا عِنْدَ ظَنِّ عَبْدِي بي، وأنا معهُ إذا ذَكَرَنِي، فإنْ ذَكَرَنِي في نَفْسِهِ ذَكَرْتُهُ في نَفْسِي، وإنْ ذَكَرَنِي في مَلَإٍ ذَكَرْتُهُ في مَلَإٍ خَيْرٍ منهمْ، وإنْ تَقَرَّبَ إلَيَّ بشِبْرٍ تَقَرَّبْتُ إلَيْهِ ذِراعًا...».",
+        grade: "صحيح متفق عليه",
+        virtue: "سعة رحمة الله وفضل التقرب إليه بالأعمال والذكر."
+      },
+      {
+        id: "d-1",
+        category: "duas",
+        bookName: "الأدعية القرآنية",
+البقرة • الآية 201", جامع لخير الدنيا والآخرة",
+        narrator: "القرآن الكريم",
+        text: "﴿رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ﴾.",
+        grade: "قرآن كريم متواتر",
+        virtue: "كان النبي ﷺ يكثر من هذا الدعاء لشموله لكل خير ووقاية من كل شر."
+      },
+      {
+        id: "d-2",
+        category: "duas",
+        bookName: "الأدعية النبوية",
+        chapter: "صحيح البخاري ومسلم",
+        title: "دعاء تفريج الهم والحزن والكرب والديْن",
+        narrator: "أنس بن مالك رضي الله عنه",
+إِنِّي أَعُوذُ بِكَ مِنَ الهَمِّ وَالحَزَنِ، وَالعَجْزِ وَالكَسَلِ، وَالبُخْلِ وَالجُبْنِ، وَضَلَعِ الدَّيْنِ، وَغَلَبَةِ الرِّجَالِ».",
+        grade: "صحيح متفق عليه",
+        virtue: "التحصن من آفات النفس والضيق والاستعاذة من قهر الديون."
+      },
+      {
+        id: "d-3",
+        category: "duas",
+        bookName: "الأدعية النبوية",
+        chapter: "صحيح البخاري",
+        title: "دعاء الاستخارة في سائر الأمور",
+        narrator: "جابر بن عبد الله رضي الله عنهما",
+        text: "«اللَّهُمَّ إِنِّي أَسْتَخِيرُكَ بِعِلْمِكَ، وَأَسْتَقْدِرُكَ بِقُدْرَتِكَ، وَأَسْأَلُكَ مِنْ فَضْلِكَ العَظِيمِ، فَإِنَّكَ تَقْدِرُ وَلاَ أَقْدِرُ، وَتَعْلَمُ وَلاَ أَعْلَمُ، وَأَنْتَ عَلاَّمُ الغُيُوبِ...».",
+        grade: "صحيح البخاري",
+        virtue: "طلب الخيرة والبركة من الله في كل خطوة وقرار وحاجة."
+      },
+      {
+        id: "ad-1",
+        category: "adhkar",
+        bookName: "أذكار الصباح والمساء",
+        chapter: "حصن المسلم • صحيح الترمذي وأبو داود",
+        title: "سيد الاستغفار",
+        narrator: "شداد بن أوس رضي الله عنه",
+        text: "«اللَّهُمَّ أَنْتَ رَبِّي لاَ إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لاَ يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ».",
+        grade: "صحيح البخاري",
+        virtقاله موقناً به حين يمسي فمات من ليلته دخل الجنة، وكذلك إذا أصبح."
+      },
+      {
+        id: "ad-2",
+        category: "adhkar",
+        bookName: "أذكار الصباح والمساء",
+        chapter: "حصن المسلم • سنن أبي داود والترمذي",
+        title: "دعاء الحفظ والوقاية من فجأة النقم والضر",
+        narrator: "عثمان بن عفان رضي الله عنه",
+        text: "«بِسْمِ اللَّهِ الَّذِي لاَ يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الأَرْضِ وَلاَ فِي السَّمَاءِ وَهُوَ السَّمِيعُ العَلِيمُ». (3 مرات)",
+        grade: "صحيح رواه الترمذي",
+        virtue: "من قالها ثلاثاً إذا أصبح وثلاثاً إذا أمسى لم يضره شيء."
+      },
+      {
+        id: "ad-3",
+        category: "adhkar",
+        bookName: "أذكار الصباح والمساء",
+        chapter: "حصن المسلم • صحيح مسلم",
+        title: "حط الخطايا ورفع الدرجات",
+        narrator: "أبو هريرة رضي الله عنه",
+اللَّهِ وَبِحَمْدِهِ». (100 مرة)",
+        grade: "صحيح مسلم",
+        virtue: "من قالها مائة مرة حين يصبح وحين يمسي حطت خطاياه وإن كانت مثل زبد البحر."
+      }
+    ];
+
+    let currentCategory = "all";
+    let favorites = JSON.parse(localStorage.getItem("sahih_favs") || "[]");
+    let tasbeehVal = 0;
+
+    function renderCards(items) {
+      const container = document.getElementById("cards-container");
+      const noRes = document.getElementById("no-results");
+      const countEl = document.getElementById("items-count");
+      container.innerHTML = "";
+
+      countEl.innerText = `${items.length} نصاً معتمداً`;
+
+      if (items.length === 0) {
+        noRes.classList.remove("hidden");
+        return;
+      }
+      noRes.classList.add("hidden");
+
+      items.forEach(item => {
+        const isFav = favorites.includes(item.id);
+        const card = document.createElement("div");
+        card.className = "bg-slate-950 border border-slate-800 hover:border-emerald-600/50 rounded-2xl p-5 flex flex-col justify-between gap-3 shadow-lg transition-all";
+
+        card.innerHTML = `
+          <div class="flex flex-col gap-2">
+            <!-- الترويسة والتصنيف -->
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <span class="text-[11px] font-bold text-emerald-400 bg-emerald-950/70 border border-emerald-800/60 px-2.5 py-0.5 rounded-lg">
+                ${item.bookName}
+              </span>
+              <span class="text-[10px] text-slate-500 font-medium">
+                ${item.chapter}
+              </span>
+            </div>
+
+            <!-- العنوان والراوي -->
+            <div>
+              <h3 class="text-sm font-black text-slate-100">${item.title}</h3>
+              <div class="text-[11px] text-slate-400 mt-0.5 flex items-center gap-1">
+                <span>الراوي:</span>
+                <span class="text-emerald-300 font-bold">${item.narrator}</span>
+              </div>
+            </div>
+
+            <!-- نص الحديث أو الدعاء بالتشكيل -->
+            <div class="p-3.5 bg-slate-900/80 rounded-xl border border-slate-800/80 my-1">
+              <p class="font-hadith text-base sm:text-lg text-amber-100 leading-loose text-justify">
+                ${item.text}
+              </p>
+            </div>
+
+            <!-- الفضل والحكم -->
+            <div class="text-[11px] text-slate-400 space-y-1">
+              <div><strong class="text-slate-300">درجة الصحة:</strong> <span class="text-emerald-400 font-semibold">${item.grade}</span></div>
+              <div><strong class="text-slate-300">من فوائده:</strong> <span>${item.virtue}</span></div>
+            </div>
+          </div>
+
+          <!-- أزرار المشاركة والمفضلة -->
+          <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
+            <button onclick="toggleFav('${item.id}')" class="flex items-center gap-1 font-bold ${isFav ? 'text-amber-400' : 'text-slate-500 hover:text-amber-400'} transition">
+              <span>${isFav ? '★ محفوظة' : '☆ حفظ للمفضلة'}</span>
+            </button>
+
+            <button onclick="copyHadith('${item.id}', this)" class="bg-slate-900 hover:bg-emerald-950 border border-slate-700 hover:border-emerald-600 text-slate-300 hover:text-emerald-300 px-3 py-1 rounded-xl font-bold transition flex items-center gap-1 text-[11px]">
+              <span>📋 نسخ النص</span>
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      document.getElementById("fav-count").innerText = favorites.length;
+    }
+
+    // تصفية الأقسام
+    function filterCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll(".cat-btn").forEach(b => {
+        b.className = "cat-btn px-4 py-1.5 rounded-xl bg-slate-900 text-slate-400 hover:text-white whitespace-nowrap transition";
+      });
+      document.getElementById("cat-" + cat).className = "cat-btn px-4 py-1.5 rounded-xl bg-emerald-600 text-white font-bold whitespace-nowrap transition shadow-md";
+
+      let filtered = [];
+      const titleEl = document.getElementById("section-title");
+
+      if (cat === "all") {
+        filtered = database;
+        titleEl.innerText = "جميع الأحاديث والأدعية الصحيحة";
+      } else if (cat === "favorites") {
+        filtered = database.filter(i => favorites.includes(i.id));
+        titleEl.innerText = "قائمتك المفضلة";
+      } else {
+        filtered = database.filter(i => i.category === cat);
+        titleEl.innerText = document.getElementById("cat-" + cat).innerText;
+      }
+      renderCards(filtered);
+    }
+
+    // البحث الحي
+    function handleSearch(term) {
+      const q = term.trim().toLowerCase();
+      if (!q) {
+        filterCategory(currentCategory);
+        return;
+      }
+      const res = database.filter(i => 
+        i.text.toLowerCase().includes(q) ||
+        i.title.toLowerCase().includes(q) ||
+        i.narrator.toLowerCase().includes(q) ||
+        i.bookName.toLowerCase().includes(q) ||
+        i.chapter.toLowerCase().includes(q)
+      );
+      document.getElementById("section-title").innerText = `نتائج البحث عن: "${term}"`;
+      renderCards(res);
+    }
+
+    function resetSearch() {
+      document.getElementById("search-input").value = "";
+      filterCategory("all");
+    }
+
+    // إدارة المفضلة في المتصفح
+    function toggleFav(id) {
+      if (favorites.includes(id)) {
+        favorites = favorites.filter(f => f !== id);
+      } else {
+        favorites.push(id);
+      }
+      localStorage.setItem("sahih_favs", JSON.stringify(favorites));
+      filterCategory(currentCategory);
+    }
+
+    // نسخ النص مع السند
+    function copyHadith(id, btn) {
+      const item = database.find(i => i.id === id);
+      if (!item) return;
+      const textToCopy = `«${item.text}»\n\n[الراوي: ${item.narrator} | المصدر: ${item.bookName} - ${item.chapter} | الحكم: ${item.grade}]\nمنقول من مكتبة صحيح`;
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = `<span class="text-emerald-400 font-bold">✔ تم النسخ!</span>`;
+        setTimeout(() => { btn.innerHTML = originalText; }, 2000);
+      });
+    }
+
+    // إدارة السبحة الإلكترونية
+    function toggleTasbeehModal() {
+      document.getElementById("tasbeeh-modal").classList.toggle("hidden");
+    }
+    function incrementTasbeeh() {
+      tasbeehVal++;
+      document.getElementById("tasbeeh-count").innerText = tasbeehVal;
+    }
+    function resetTasbeeh() {
+      tasbeehVal = 0;
+      document.getElementById("tasbeeh-count").innerText = tasbeehVal;
+    }
+    function setDhikrText(txt) {
+      document.getElementById("dhikr-label").innerText = txt;
+      resetTasbeeh();
+    }
+
+    // تشغيل أولي
+    renderCards(database);
+  </script>
+</body>
+</html>
